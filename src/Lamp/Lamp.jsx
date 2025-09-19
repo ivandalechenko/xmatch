@@ -9,10 +9,19 @@ export default function Lamp({ config = {} }) {
     useEffect(() => {
         const $c = canvasRef.current;
         const engine = createLamp($c, { ...defaultCfg, ...config });
-        const onResize = () => engine.onResize();
+
+        // локальный ResizeObserver по канвасу (доп. к тем, что внутри)
+        const ro = typeof ResizeObserver !== "undefined"
+            ? new ResizeObserver(() => engine.onResize())
+            : null;
+        ro?.observe($c);
+
         engine.start(drawRefractionStripes);
-        window.addEventListener("resize", onResize);
-        return () => { engine.stop(); window.removeEventListener("resize", onResize); };
+
+        return () => {
+            ro?.disconnect();
+            engine.stop();
+        };
     }, [config]);
 
     return (
