@@ -60,13 +60,13 @@ export function drawRefractionStripes(ctx, buf, W, H, cfg, dpr) {
         // визуальный градиент: край белый 0.1 → внутрь прозрачный
         if (eW > 0) {
             const gLeft = ctx.createLinearGradient(L, 0, L + eW, 0);
-            gLeft.addColorStop(0, "rgba(255,255,255,0.10)");
+            gLeft.addColorStop(0, "rgba(255,255,255,0.02)");
             gLeft.addColorStop(1, "rgba(255,255,255,0.00)");
             ctx.fillStyle = gLeft;
             ctx.fillRect(L, 0, eW, H);
 
             const gRight = ctx.createLinearGradient(R, 0, R - eW, 0);
-            gRight.addColorStop(0, "rgba(255,255,255,0.10)");
+            gRight.addColorStop(0, "rgba(255,255,255,0.02)");
             gRight.addColorStop(1, "rgba(255,255,255,0.00)");
             ctx.fillStyle = gRight;
             ctx.fillRect(R - eW, 0, eW, H);
