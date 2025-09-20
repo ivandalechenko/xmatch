@@ -2,10 +2,10 @@
 const config = {
     blobs: 12, // количество кругов
     blurPx: 0, // блюр кругов
-    blurPx: 40, // блюр кругов
-    alpha: .5, // прозрачность 
+    blurPx: 50, // блюр кругов
+    alpha: .15, // прозрачность 
     hueChangeSpeed: 10, // скорость изменения цвета (сколько пунктов в секунду)
-    maxSpeed: 40, // максимальная скорость (пикселей в секунду)
+    maxSpeed: 50, // максимальная скорость (пикселей в секунду)
 
     maxSpeedBackAcceleration: 2,
 
@@ -29,10 +29,11 @@ const config = {
     bg: null,
     stripes: {
         count: 8,
+        // count: 0,
         width: window.innerWidth / 8,
         gap: 0,
-        edgeWidth: 50,
-        refractPx: 50,
+        edgeWidth: (window.innerWidth / 8) / 2,
+        refractPx: (window.innerWidth / 8) / 2,
         edgeBiasPow: 1.2,
         minCenterStrength: 0.2
     },
