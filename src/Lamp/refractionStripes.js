@@ -1,20 +1,21 @@
+// components/Lamp/refractionStripes.js
 import { clamp, ease } from "./utils";
 
 /**
- * Полосы с визуальным градиентом: на краю (max refraction) — rgba(255,255,255,0.1),
- * к центру полосы (нет рефракции) — прозрачный.
+ * Использует ТОЛЬКО cfg.stripes.*
  */
 export function drawRefractionStripes(ctx, buf, W, H, cfg, dpr) {
     ctx.clearRect(0, 0, W, H);
     ctx.drawImage(buf, 0, 0);
 
     const s = cfg.stripes ?? {};
-    const stripeW = Math.round(((s.width ?? cfg.stripeWidth) || 150) * dpr);
-    const edgeW = Math.round(((s.edgeWidth ?? cfg.edgeWidth) || 50) * dpr);
+    const stripeW = Math.round((s.width ?? 150) * dpr);
+    const edgeW = Math.round((s.edgeWidth ?? 50) * dpr);
     const gapW = Math.round((s.gap ?? 0) * dpr);
-    const baseShift = Math.round(((s.refractPx ?? cfg.refractPx) || 50) * dpr);
+    const baseShift = Math.round((s.refractPx ?? 50) * dpr);
 
-    const count = Math.max(1, s.count ?? 8);
+    // const count = Math.max(1, s.count ?? 8);
+    const count = s.count;
     const totalW = count * stripeW + (count - 1) * gapW;
     const startX = ((W - totalW) / 2) | 0;
 
@@ -41,7 +42,7 @@ export function drawRefractionStripes(ctx, buf, W, H, cfg, dpr) {
             ctx.drawImage(buf, sx, 0, 1, H, x, 0, 1, H);
         }
 
-        // центр без искажений
+        // центр
         const midL = L + eW;
         const midR = R - eW;
         if (midR > midL) {
@@ -56,18 +57,16 @@ export function drawRefractionStripes(ctx, buf, W, H, cfg, dpr) {
             ctx.drawImage(buf, sx, 0, 1, H, x, 0, 1, H);
         }
 
-        // --- визуальный градиент стекла на краях ---
-        // левая кромка: от края (L) белый 0.1 → к центру полосы прозрачный
+        // визуальный градиент: край белый 0.1 → внутрь прозрачный
         if (eW > 0) {
             const gLeft = ctx.createLinearGradient(L, 0, L + eW, 0);
-            gLeft.addColorStop(0, "rgba(255,255,255,0.04)");
+            gLeft.addColorStop(0, "rgba(255,255,255,0.10)");
             gLeft.addColorStop(1, "rgba(255,255,255,0.00)");
             ctx.fillStyle = gLeft;
             ctx.fillRect(L, 0, eW, H);
 
-            // правая кромка: от края (R) белый 0.1 → внутрь прозрачный
             const gRight = ctx.createLinearGradient(R, 0, R - eW, 0);
-            gRight.addColorStop(0, "rgba(255,255,255,0.04)");
+            gRight.addColorStop(0, "rgba(255,255,255,0.10)");
             gRight.addColorStop(1, "rgba(255,255,255,0.00)");
             ctx.fillStyle = gRight;
             ctx.fillRect(R - eW, 0, eW, H);

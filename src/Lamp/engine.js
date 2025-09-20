@@ -51,7 +51,7 @@ export function createLamp(canvas, userCfg) {
     let prev = performance.now();
     function loop(drawRefract) {
         const now = performance.now();
-        const dt = Math.min(1.2, (now - prev) / 16.6667);
+        let dt = (now - prev) / 1000;      // сек
         prev = now;
 
         stepBlobs(blobs, dt, W, H, cfg, dpr);
